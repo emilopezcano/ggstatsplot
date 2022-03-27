@@ -80,7 +80,7 @@ ggbarstats <- function(data,
   if (drop.unused.levels){
     data %<>% mutate(across(.fns = ~ droplevels(as.factor(.x))))
   } else {
-    data %<>% mutate(across(.fns = ~ as.factor(.x)))
+    #data %<>% mutate(across(.fns = ~ as.factor(.x)))
   }
 
   # TO DO: until one-way table is supported by `BayesFactor`
