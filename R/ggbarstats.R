@@ -57,6 +57,7 @@ ggbarstats <- function(data,
                        palette = "Dark2",
                        ggplot.component = NULL,
                        output = "plot",
+                       drop.unused.levels = TRUE,
                        ...) {
 
   # dataframe ------------------------------------------
@@ -75,8 +76,12 @@ ggbarstats <- function(data,
   # untable the dataframe based on the count for each observation
   if (".counts" %in% names(data)) data %<>% tidyr::uncount(weights = .counts)
 
-  # x and y need to be a factor; also drop the unused levels of the factors
-  data %<>% mutate(across(.fns = ~ droplevels(as.factor(.x))))
+  # x and y need to be a factor; also drop the unused levels of the factors (if desired)
+  if (drop.unused.levels){
+    data %<>% mutate(across(.fns = ~ droplevels(as.factor(.x))))
+  } else {
+    data %<>% mutate(across(.fns = ~ as.factor(.x)))
+  }
 
   # TO DO: until one-way table is supported by `BayesFactor`
   if (nlevels(data %>% pull({{ y }})) == 1L) c(bf.message, proportion.test) %<-% c(FALSE, FALSE)
